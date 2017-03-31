@@ -1,79 +1,77 @@
 # Instalacion
 
-npm install destinos-autocomplete
-
-
+> npm install destinos-autocomplete
 
 > Para que funcione necesita que este definida la variable `destinos_url` con la URL del endpoint.
 
 ```javascript
-	var myApp = angular.module('myApp', ['destinos-autocomplete']);
+var myApp = angular.module('myApp', ['destinos-autocomplete']);
 ```
 
 ```html
-	<destinos-autocomplete model="uno" settings="{}"></destinos-autocomplete>
+<destinos-autocomplete model="uno" settings="{}"></destinos-autocomplete>
 ```
 
 
 # Ejemplos
 
-##Basico
+## Basico
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{}"></destinos-autocomplete>
 ```
 
-##Valor preseleccionado
+## Valor preseleccionado
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot;  selected=&quot;selected&quot; settings=&quot;{}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno"  selected="selected" settings="{}"></destinos-autocomplete>
 ```
 
-##Solo con codigo Iata
+## Solo con codigo Iata
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{iata: true}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{iata: true}"></destinos-autocomplete>
 ```
-##Boton limpiar
+## Boton limpiar
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyBtn: true}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyBtn: true}"></destinos-autocomplete>
 ```
-##Vaciar input despues de seleccionar
+## Vaciar input despues de seleccionar
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyAfterSelect: true}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyAfterSelect: true}"></destinos-autocomplete>
 ```
-##Array <small>(model tiene que ser array)</small>
+## Array <small>(model tiene que ser array)</small>
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyBtn: true, isArray: true}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyBtn: true, isArray: true}"></destinos-autocomplete>
 ```
-##Callback al seleccionar
+## Callback al seleccionar
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyBtn: true, onSelect: 'custom'}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyBtn: true, onSelect: 'custom'}"></destinos-autocomplete>
 ```
 
-##Paises
+## Paises
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyBtn: true, destino: 'paises'}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyBtn: true, destino: 'paises'}"></destinos-autocomplete>
 ```
 
-##Aeropuertos
+## Aeropuertos
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyBtn: true, destino: 'aeropuertos'}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyBtn: true, destino: 'aeropuertos'}"></destinos-autocomplete>
 ```
 
-##Completo
+## Completo
 
 ```html
-  &lt;destinos-autocomplete model=&quot;uno&quot; settings=&quot;{emptyBtn: true, destino: 'completos'}&quot;&gt;&lt;/destinos-autocomplete&gt;
+<destinos-autocomplete model="uno" settings="{emptyBtn: true, destino: 'completos'}"></destinos-autocomplete>
 ```
 
-##Opciones
+## Opciones
 ```javascript
   {
     placeholder: 'Ingresá 3 letras y seleccioná del listado', //Placeholder del input
