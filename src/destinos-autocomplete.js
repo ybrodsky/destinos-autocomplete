@@ -58,6 +58,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	}])
 	.controller('DestinosAutocompleteCtrl', ['$scope', 'Api', '$q', function($scope, Api, $q) {
 		$scope.selected = $scope.selected || '';
+		$scope.model = $scope.selected;
 
 		$scope.defaults = {
 			placeholder: 'Ingresá 3 letras y seleccioná del listado',
@@ -202,6 +203,8 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	  };
 
 	  $scope.onSelect = function(data) {
+	    if(!data) return false;
+
 	    if($scope.defaults.isArray == true) {
 	      $scope.model.push(data);
 	      $scope.selected = '';
