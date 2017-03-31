@@ -1,0 +1,4 @@
+<a>
+  <i class="fa " ng-class="{'fa-map-marker': match.model.esCiudad, 'fa-globe': match.model.esPais, 'fa-plane': match.model.esAeropuerto}"></i> &nbsp;
+  <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+</a>
