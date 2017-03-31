@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gdo'])
-	.factory('Api', function($resource) {
+	.factory('ApiDestinos', function($resource) {
   	return $resource(destinos_url + '/api', {
 
   	}, {
@@ -56,7 +56,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	    controller: 'DestinosAutocompleteCtrl'
 	  }
 	}])
-	.controller('DestinosAutocompleteCtrl', ['$scope', 'Api', '$q', function($scope, Api, $q) {
+	.controller('DestinosAutocompleteCtrl', ['$scope', 'ApiDestinos', '$q', function($scope, ApiDestinos, $q) {
 		$scope.selected = $scope.selected || '';
 		$scope.model = $scope.selected;
 
@@ -102,7 +102,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	      where.code = {'$ne': ''};
 	    }
 
-	    return Api.ciudades({
+	    return ApiDestinos.ciudades({
 	      where: where,
 	      include: JSON.stringify([{model: "Country", attributes: ['name', 'region_id']}])
 	    }).$promise.then(function(res) {
@@ -128,7 +128,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	  };
 
 	  function getPaises(name) {
-	    return Api.paises({
+	    return ApiDestinos.paises({
 	      attributes: JSON.stringify(['id', 'name', 'code']),
 	      where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]}
 	    }).$promise.then(function(res) {
@@ -144,15 +144,15 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 
 	  function getCompletos(name) {
 	    return $q.all([
-	      Api.regiones({
+	      ApiDestinos.regiones({
 	        attributes: JSON.stringify(['id', 'name', 'code']),
 	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]}
 	      }).$promise,
-	      Api.paises({
+	      ApiDestinos.paises({
 	        attributes: JSON.stringify(['id', 'name', 'region_id', 'code']),
 	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]}
 	      }).$promise,
-	      Api.ciudades({
+	      ApiDestinos.ciudades({
 	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
 	        include: JSON.stringify([{model: "Country", attributes: ['name']}])
 	      }).$promise
@@ -177,11 +177,11 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 
 	  function getAeropuertos(name) {
 	    return $q.all([
-	      Api.ciudades({
+	      ApiDestinos.ciudades({
 	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
 	        include: JSON.stringify([{model: "Country", attributes: ['name']}])
 	      }).$promise,
-	      Api.aeropuertos({
+	      ApiDestinos.aeropuertos({
 	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
 	        include: JSON.stringify([{model: "City", attributes: ['name']}])
 	      }).$promise
