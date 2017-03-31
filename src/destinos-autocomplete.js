@@ -178,7 +178,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	  function getAeropuertos(name) {
 	    return $q.all([
 	      ApiDestinos.ciudades({
-	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
+	        where: {code: {'$ne': ''}, '$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
 	        include: JSON.stringify([{model: "Country", attributes: ['name']}])
 	      }).$promise,
 	      ApiDestinos.aeropuertos({
@@ -222,7 +222,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	    }, 10);
 	  };
 	}])
-	.factory('httpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+	.factory('destinosHttpInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
 	  return {
 	    request: function (config) {
 	    	delete config.headers.ajaxLoader;
@@ -232,5 +232,5 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	  }
   }])
   .config(["$httpProvider", function ($httpProvider) {
-    $httpProvider.interceptors.push('httpInterceptor');
+    $httpProvider.interceptors.push('destinosHttpInterceptor');
   }]);
