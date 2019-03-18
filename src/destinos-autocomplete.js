@@ -5,8 +5,17 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
   	return $resource(destinos_url + '/api', {
 
   	}, {
-  		ciudades: {
-	      url: destinos_url + '/api/cities',
+			autocompleteFull: {
+	      url: destinos_url + '/api/cities/autocomplete/full',
+	      method: 'GET',
+	      headers: {
+	        ajaxLoader: false
+	      },
+	      withCredentials: false,
+	      isArray: true
+			},
+  		cities: {
+	      url: destinos_url + '/api/cities/autocomplete',
 	      method: 'GET',
 	      headers: {
 	        ajaxLoader: false
@@ -14,8 +23,8 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	      withCredentials: false,
 	      isArray: true
 	    },
-	    regiones: {
-	      url: destinos_url + '/api/regions',
+	    countries: {
+	      url: destinos_url + '/api/countries/autocomplete',
 	      method: 'GET',
 	      headers: {
 	        ajaxLoader: false
@@ -23,17 +32,8 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	      withCredentials: false,
 	      isArray: true
 	    },
-	    paises: {
-	      url: destinos_url + '/api/countries',
-	      method: 'GET',
-	      headers: {
-	        ajaxLoader: false
-	      },
-	      withCredentials: false,
-	      isArray: true
-	    },
-	    aeropuertos: {
-	      url: destinos_url + '/api/aeropuertos',
+	    airports: {
+	      url: destinos_url + '/api/airports/autocomplete',
 	      method: 'GET',
 	      headers: {
 	        ajaxLoader: false
@@ -95,111 +95,41 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	  };
 
 	  function getCiudades(name) {
-	    var where = {
-	      '$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]
-	    };
-	    if($scope.defaults.iata) {
-	      where.code = {'$ne': ''};
-	    }
-
-	    return ApiDestinos.ciudades({
-	      where: where,
-	      include: JSON.stringify([{model: "Country", attributes: ['name', 'region_id']}])
+	    return ApiDestinos.cities({
+	      query: name,
 	    }).$promise.then(function(res) {
-	      return res.map(function(item) {
-	      	if(!item.Country) return;
-
-	        return {
-	          label: item.name + ', ' + item.Country.name,
-	          value: item.id,
-	          pais: item.country_id || null,
-	          region: item.Country.region_id || null,
-	          code: item.code || null,
-	          hoteldo: item.hdo_code || null,
-	          tourico: item.tourico_code || null,
-	          hotelbeds: item.hotelbeds_code || null,
-	          infinitas: item.infinitas_code || null,
-	          lat: item.lat || null,
-	          lon: item.lon || null,
-	          esCiudad: true
-	        };
-	      });
+				return res.filter(function(i) {
+					return i.Country
+				});
 	    });
 	  };
 
 	  function getPaises(name) {
-	    return ApiDestinos.paises({
-	      attributes: JSON.stringify(['id', 'name', 'code']),
-	      where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]}
+	    return ApiDestinos.countries({
+	      query: name
 	    }).$promise.then(function(res) {
-	      return res.map(function(item) {
-	        return {
-	          label: item.name,
-	          value: item.id,
-	          esPais: true
-	        };
-	      });
+	      return res;
 	    });
 	  };
 
 	  function getCompletos(name) {
-	    return $q.all([
-	      ApiDestinos.regiones({
-	        attributes: JSON.stringify(['id', 'name', 'code']),
-	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]}
-	      }).$promise,
-	      ApiDestinos.paises({
-	        attributes: JSON.stringify(['id', 'name', 'region_id', 'code']),
-	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]}
-	      }).$promise,
-	      ApiDestinos.ciudades({
-	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
-	        include: JSON.stringify([{model: "Country", attributes: ['name']}])
-	      }).$promise
-	    ]).then(function(results) {
-	      var data = [];
-	      results.forEach(function(result) {
-	        data = data.concat(result);
-	      });
-	      return data.map(function(item) {
-	        return {
-	          label: item.name + (item.Country ? ', ' + item.Country.name : ''),
-	          value: item.id,
-	          country_id: item.country_id || null,
-	          region_id: item.region_id || null,
-	          pais: item.country_id || null,
-	          esCiudad: item.country_id ? true : false,
-	          esPais: item.country_id ? false : true
-	        };
-	      });
+			return ApiDestinos.autocompleteFull({
+				query: name,
+			}).then(function(results) {
+	      return results;
 	    });
 	  };
 
 	  function getAeropuertos(name) {
-	    return $q.all([
-	      ApiDestinos.ciudades({
-	        where: {code: {'$ne': ''}, '$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
-	        include: JSON.stringify([{model: "Country", attributes: ['name']}])
-	      }).$promise,
-	      ApiDestinos.aeropuertos({
-	        where: {'$or': [{'name': {'$like': '%' + name + '%'}}, {'code': name}]},
-	        include: JSON.stringify([{model: "City", attributes: ['name']}])
-	      }).$promise
-	    ]).then(function(results) {
-	      var data = [];
-	      results.forEach(function(result) {
-	        data = data.concat(result);
-	      });
-	      return data.map(function(item) {
-	        return {
-	          label: item.name + ', ' + (item.Country ? item.Country.name : item.City.name),
-	          value: item.id,
-	          code: item.code,
-	          esAeropuerto: item.country_id ? false : true,
-	          esCiudad: item.country_id ? true : false
-	        };
-	      });
-	    });
+			return ApiDestinos.airports({
+				query: name,
+			}).$promise.then(function(res) {
+				return res.map(function(item) {
+					return Object.assign({}, item, {
+						name: item.name + ', ' + (item.Country ? item.Country.name : item.City.name),
+					});
+				});
+			});
 	  };
 
 	  $scope.onSelect = function(data) {

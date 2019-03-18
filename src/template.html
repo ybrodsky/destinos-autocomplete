@@ -3,7 +3,7 @@
 		type="text"
 		ng-model="selected"
 		placeholder="{{defaults.placeholder}}"
-		uib-typeahead="n as n.label for n in getDestinos($viewValue)"
+		uib-typeahead="n as n.name for n in getDestinos($viewValue)"
 		typeahead-loading="loading"
 		typeahead-no-results="noResults"
 		class="form-control"
