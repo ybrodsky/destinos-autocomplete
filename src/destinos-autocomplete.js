@@ -100,6 +100,12 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	    }).$promise.then(function(res) {
 				return res.filter(function(i) {
 					return i.Country
+				}).map(function(item) {
+					return Object.assign({}, item, {
+						name: item.name + ', ' + item.Country.name,
+						value: item.id,
+						label: item.name,
+					});
 				});
 	    });
 	  };
@@ -108,7 +114,12 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	    return ApiDestinos.countries({
 	      query: name
 	    }).$promise.then(function(res) {
-	      return res;
+	      return res.map(function(item) {
+					return Object.assign({}, item, {
+						value: item.id,
+						label: item.name,
+					});
+				});
 	    });
 	  };
 
@@ -116,8 +127,13 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 			return ApiDestinos.autocompleteFull({
 				query: name,
 			}).$promise.then(function(results) {
-	      return results;
-	    });
+	      return results.map(function(item) {
+					return Object.assign({}, item, {
+						value: item.id,
+						label: item.name,
+					});
+				});
+			});
 	  };
 
 	  function getAeropuertos(name) {
@@ -127,6 +143,8 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 				return res.map(function(item) {
 					return Object.assign({}, item, {
 						name: item.name + ', ' + (item.Country ? item.Country.name : item.City.name),
+						value: item.id,
+						label: item.name,
 					});
 				});
 			});
