@@ -115,7 +115,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 	  function getCompletos(name) {
 			return ApiDestinos.autocompleteFull({
 				query: name,
-			}).then(function(results) {
+			}).$promise.then(function(results) {
 	      return results;
 	    });
 	  };

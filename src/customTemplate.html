@@ -1,4 +1,4 @@
 <a>
   <i class="fa " ng-class="{'fa-map-marker': match.model.type === 'CITY', 'fa-globe': match.model.type === 'COUNTRY', 'fa-plane': match.model.type === 'AIRPORT'}"></i> &nbsp;
-  <span ng-bind-html="match.name | uibTypeaheadHighlight:query"></span>
+  <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
 </a>
