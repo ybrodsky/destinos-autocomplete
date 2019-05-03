@@ -104,7 +104,7 @@ angular.module('destinos-autocomplete', ['ng', 'ngResource', 'ui.bootstrap', 'Gd
 					return Object.assign({}, item, {
 						name: item.name + ', ' + item.Country.name,
 						value: item.id,
-						label: item.name,
+						label: item.name + ', ' + item.Country.name,
 					});
 				});
 	    });
